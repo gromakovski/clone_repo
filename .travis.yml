@@ -1,0 +1,97 @@
+dist: xenial
+
+language: cpp
+compiler:
+    - gcc
+    
+before_script:
+    - sudo echo "deb http://archive.ubuntu.com/ubuntu/ bionic main" > /etc/apt/sources.list
+    - sudo echo "deb http://archive.ubuntu.com/ubuntu/ bionic-updates main" >> /etc/apt/sources.list
+    - sudo add-apt-repository universe    
+    - sudo apt update  
+    - sudo apt-get install -y doxygen
+    - sudo apt-get install g++ cmake libboost-system-dev
+  
+script: 
+    - cd $TRAVIS_BUILD_DIR
+    - doxygen
+    - ls -la
+    - cd homework1/helloworld/
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
+    - cmake --build . --target package
+    - cd ../../../
+    - cd homework2
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make 
+    - cmake --build . --target package
+    - cd $TRAVIS_BUILD_DIR
+    - cd homework3
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
+    - cmake --build . --target package
+    - cd $TRAVIS_BUILD_DIR
+    - cd homework4
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
+    - cmake --build . --target package
+    - cd $TRAVIS_BUILD_DIR
+    - cd homework6
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
+    - cmake --build . --target package
+    - cd $TRAVIS_BUILD_DIR
+    - cd homework7
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
+    - cmake --build . --target package
+    - cd $TRAVIS_BUILD_DIR
+    - cd homework10
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
+    - cmake --build . --target package
+    - cd $TRAVIS_BUILD_DIR
+    - cd homework11
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
+    - cmake --build . --target package
+    - cd $TRAVIS_BUILD_DIR
+    - cd homework12
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
+    - cmake --build . --target package
+    - cd $TRAVIS_BUILD_DIR
+
+
+
+deploy:
+- provider: script
+  skip_cleanup: true
+  script: bash deploy.sh
+
+- provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  local_dir: html
+  target_branch: gh-pages 
+  keep-history: true
+  on:
+    branch: master
